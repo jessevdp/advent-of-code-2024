@@ -1,4 +1,5 @@
 require "./location_list"
+require "./side_by_side_location_list_parser"
 
 lines = if ARGV.size > 0
   filepath = ARGV.first
@@ -7,15 +8,6 @@ else
   [] of String
 end
 
-column_1 = [] of LocationList::LocationID
-column_2 = [] of LocationList::LocationID
-lines.each do |line|
-  values = line.split
-  column_1 << values.pop.to_i
-  column_2 << values.pop.to_i
-end
-
-list_1 = LocationList.new(column_1)
-list_2 = LocationList.new(column_2)
-
+list_1, list_2 = SideBySideLocationListParser.new(lines).parse
 puts list_1.difference_to(list_2)
+
