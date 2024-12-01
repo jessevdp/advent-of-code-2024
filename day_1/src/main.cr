@@ -7,8 +7,8 @@ else
   [] of String
 end
 
-column_1 = [] of Int32
-column_2 = [] of Int32
+column_1 = [] of LocationList::LocationID
+column_2 = [] of LocationList::LocationID
 lines.each do |line|
   values = line.split
   column_1 << values.pop.to_i

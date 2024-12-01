@@ -1,5 +1,7 @@
 class LocationList
-  getter location_ids : Array(Int32)
+  alias LocationID = Int32
+
+  getter location_ids : Array(LocationID)
 
   def initialize(@location_ids)
   end
