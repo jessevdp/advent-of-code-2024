@@ -14,6 +14,14 @@ class LocationList
     total_difference
   end
 
+  def similarity_to(other_list : LocationList)
+    score = 0
+    self.each do |value|
+      score += value * other_list.count(value)
+    end
+    score
+  end
+
   def size
     @location_ids.size
   end

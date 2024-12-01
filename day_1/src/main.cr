@@ -9,5 +9,10 @@ else
 end
 
 list_1, list_2 = SideBySideLocationListParser.new(lines).parse
+
+puts "Part 1:"
 puts list_1.difference_to(list_2)
+
+puts "Part 2:"
+puts list_1.similarity_to(list_2)
 
