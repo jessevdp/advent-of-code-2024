@@ -8,12 +8,12 @@ describe SideBySideLocationListParser do
       "2   5",
     ]
     list_1, list_2 = SideBySideLocationListParser.new(input).parse
-    list_1.location_ids.should eq([
+    list_1.should eq([
       3,
       4,
       2,
     ])
-    list_2.location_ids.should eq([
+    list_2.should eq([
       4,
       3,
       5,

@@ -5,17 +5,15 @@ class SideBySideLocationListParser
   end
 
   def parse
-    column_1 = [] of LocationList::LocationID
-    column_2 = [] of LocationList::LocationID
+    list_1 = LocationList.new
+    list_2 = LocationList.new
+
     @lines.each do |line|
       values = line.split
-      column_1 << values.shift.to_i
-      column_2 << values.shift.to_i
+      list_1 << values.shift.to_i
+      list_2 << values.shift.to_i
     end
 
-    {
-      LocationList.new(column_1),
-      LocationList.new(column_2)
-    }
+    { list_1, list_2 }
   end
 end
