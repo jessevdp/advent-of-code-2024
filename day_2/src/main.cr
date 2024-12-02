@@ -15,3 +15,6 @@ end
 puts "Part 1:"
 puts reports.count(&.safe?)
 
+puts "Part 2:"
+puts reports.count(&.safe_when_dampened?)
+

@@ -32,5 +32,22 @@ describe Report do
       report.safe?.should be_true
     end
   end
+
+  describe "#safe_when_dampened?" do
+    it "returns true when the Report is #safe?" do
+      Report.new([7, 6, 4, 2, 1]).safe_when_dampened?.should be_true
+      Report.new([1, 3, 6, 7, 9]).safe_when_dampened?.should be_true
+    end
+
+    it "returns true when at least 1 dampened permutation is safe" do
+      Report.new([1, 3, 2, 4, 5]).safe_when_dampened?.should be_true
+      Report.new([8, 6, 4, 4, 1]).safe_when_dampened?.should be_true
+    end
+
+    it "returns false when all dampened permutations are unsafe" do
+      Report.new([1, 2, 7, 8, 9]).safe_when_dampened?.should be_false
+      Report.new([9, 7, 6, 2, 1]).safe_when_dampened?.should be_false
+    end
+  end
 end
 
