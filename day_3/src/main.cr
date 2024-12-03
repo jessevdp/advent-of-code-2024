@@ -13,6 +13,6 @@ end
 
 program = ProgramParser.new(lines).parse
 
-puts "Part 1:"
+puts "Part 2:"
 puts program.execute
 
