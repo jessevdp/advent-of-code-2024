@@ -1,5 +1,6 @@
 class Program::DoInstruction < Program::Instruction
   def execute(context : Program::Context)
+    context.enable
     0
   end
 
