@@ -5,12 +5,16 @@ class Program
   end
 
   def execute
-    @instructions.sum { |instruction| instruction.execute }
+    context = Program::Context.new
+    @instructions.sum { |instruction| instruction.execute(context) }
   end
 end
 
+class Program::Context
+end
+
 abstract class Program::Instruction
-  abstract def execute
+  abstract def execute(context : Program::Context)
   abstract def ==(other : Program::Instruction)
 end
 

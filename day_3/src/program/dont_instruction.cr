@@ -1,5 +1,5 @@
 class Program::DontInstruction < Program::Instruction
-  def execute
+  def execute(context : Program::Context)
     0
   end
 

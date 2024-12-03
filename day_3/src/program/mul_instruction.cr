@@ -4,7 +4,7 @@ class Program::MulInstruction < Program::Instruction
   def initialize(@a : Int32, @b : Int32)
   end
 
-  def execute
+  def execute(context)
     @a * @b
   end
 
