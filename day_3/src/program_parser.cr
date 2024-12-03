@@ -13,12 +13,11 @@ class ProgramParser
     instructions = [] of Program::Instruction
 
     @lines.each do |line|
+      matches = [] of ProgramParser::Match
       @rules.each do |rule|
-        matches = line.scan(rule.regex)
-        matches.each do |match|
-          instructions << rule.block.call(match)
-        end
+        matches += rule.scan(line)
       end
+      instructions += matches.sort_by(&.begin_position_in_line).map(&.instruction)
     end
 
     Program.new(instructions)
@@ -32,5 +31,23 @@ class ProgramParser::Rule
 
   def self.create(regex : Regex, &block : Regex::MatchData -> Program::Instruction)
     new(regex, block)
+  end
+
+  def scan(line : String)
+    matches = line.scan(@regex).map do |match|
+      instruction = @block.call(match)
+      ProgramParser::Match.new(instruction, match)
+    end
+  end
+end
+
+class ProgramParser::Match
+  getter instruction
+
+  def initialize(@instruction : Program::Instruction, @regex_match : Regex::MatchData)
+  end
+
+  def begin_position_in_line
+    @regex_match.begin
   end
 end
