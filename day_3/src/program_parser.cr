@@ -5,7 +5,9 @@ class ProgramParser
         a = match["a"].to_i
         b = match["b"].to_i
         Program::MulInstruction.new(a, b)
-      end
+      end,
+      ProgramParser::Rule.create(/do\(\)/) { Program::DoInstruction.new },
+      ProgramParser::Rule.create(/don't\(\)/) { Program::DontInstruction.new },
     ]
   end
 

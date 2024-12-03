@@ -1,5 +1,7 @@
 require "./program"
 require "./program/mul_instruction"
+require "./program/do_instruction"
+require "./program/dont_instruction"
 require "./program_parser"
 
 lines = if ARGV.size > 0
