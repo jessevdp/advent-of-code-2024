@@ -1,10 +1,10 @@
 class Program::DoInstruction < Program::Instruction
-  def execute(context : Program::Context)
+  def execute(context)
     context.enable
     0
   end
 
-  def ==(other : Program::Instruction)
+  def ==(other)
     other.is_a?(Program::DoInstruction)
   end
 end

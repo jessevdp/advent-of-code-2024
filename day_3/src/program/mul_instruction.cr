@@ -8,7 +8,7 @@ class Program::MulInstruction < Program::Instruction
     @a * @b
   end
 
-  def ==(other : Program::Instruction)
+  def ==(other)
     return false unless other.is_a?(Program::MulInstruction)
     return @a == other.a && @b == other.b
   end

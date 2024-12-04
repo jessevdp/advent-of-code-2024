@@ -1,7 +1,7 @@
 class Program
-  getter instructions
+  getter instructions : Array(Program::Instruction)
 
-  def initialize(@instructions : Array(Program::Instruction))
+  def initialize(@instructions)
   end
 
   def execute
