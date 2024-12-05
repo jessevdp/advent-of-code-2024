@@ -41,3 +41,34 @@ describe CharacterGrid do
     end
   end
 end
+
+describe CharacterGrid::Cell do
+  describe "value_in_direction" do
+    it "returns the string of :length in :direction" do
+      grid = CharacterGrid.new([
+        "ABC",
+        "DEF",
+        "GHI",
+      ])
+      grid.cell_at(x: 0, y: 0).not_nil!
+        .value_in_direction(direction: :right, length: 3).should eq("ABC")
+      grid.cell_at(x: 0, y: 0).not_nil!
+        .value_in_direction(direction: :down_right, length: 3).should eq("AEI")
+      grid.cell_at(x: 1, y: 1).not_nil!
+        .value_in_direction(direction: :down_right, length: 2).should eq("EI")
+    end
+
+    it "returns nil when a string of :length in :direction is not possible" do
+      grid = CharacterGrid.new([
+        "ABC",
+        "DEF",
+        "GHI",
+      ])
+
+      grid.cell_at(x: 0, y: 0).not_nil!
+        .value_in_direction(direction: :right, length: 4).should be_nil
+      grid.cell_at(x: 1, y: 1).not_nil!
+        .value_in_direction(direction: :down, length: 3).should be_nil
+    end
+  end
+end

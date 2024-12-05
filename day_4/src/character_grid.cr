@@ -74,6 +74,10 @@ class CharacterGrid::Cell
 
   def initialize(@content, @coordinate, @grid)
   end
+
+  def value_in_direction(direction : Direction, length)
+    @grid.value_at(@coordinate, length, direction)
+  end
 end
 
 enum CharacterGrid::Direction
