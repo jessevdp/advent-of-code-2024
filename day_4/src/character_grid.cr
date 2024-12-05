@@ -22,12 +22,14 @@ class CharacterGrid
     @rows[coordinate.y][coordinate.x]
   end
 
-  def value_at(x, y, length, direction : Direction)
-    value_at(Coordinate.new(x, y), length, direction)
+  def value_at(x, y, length, direction : Direction, offset = 0)
+    value_at(Coordinate.new(x, y), length, direction, offset)
   end
 
-  def value_at(coordinate, length, direction : Direction)
-    coordinates = [coordinate]
+  def value_at(coordinate, length, direction : Direction, offset = 0)
+    start_coordinate = coordinate.offset(direction, count: offset)
+
+    coordinates = [start_coordinate]
     (length - 1).times do
       coordinates << coordinates.last + direction
     end
@@ -63,9 +65,13 @@ class CharacterGrid::Coordinate
   end
 
   def +(direction : Direction)
+    offset(direction, count: 1)
+  end
+
+  def offset(direction : Direction, count)
     self.class.new(
-      x: x + direction.x_offset,
-      y: y + direction.y_offset,
+      x: x + (direction.x_offset * count),
+      y: y + (direction.y_offset * count),
     )
   end
 end
@@ -79,8 +85,8 @@ class CharacterGrid::Cell
   def initialize(@content, @coordinate, @grid)
   end
 
-  def value_in_direction(direction : Direction, length)
-    @grid.value_at(@coordinate, length, direction)
+  def value_in_direction(direction : Direction, length, offset = 0)
+    @grid.value_at(@coordinate, length, direction, offset)
   end
 end
 

@@ -70,5 +70,18 @@ describe CharacterGrid::Cell do
       grid.cell_at(x: 1, y: 1).not_nil!
         .value_in_direction(direction: :down, length: 3).should be_nil
     end
+
+    it "can handle an offset" do
+      grid = CharacterGrid.new([
+        "ABC",
+        "DEF",
+        "GHI",
+      ])
+      grid.cell_at(x: 1, y: 1).not_nil!
+        .value_in_direction(:down_right, length: 3, offset: -1).should eq("AEI")
+      grid.cell_at(x: 1, y: 1).not_nil!
+        .value_in_direction(:down_right, length: 3, offset: -2).should be_nil
+    end
   end
 end
+
