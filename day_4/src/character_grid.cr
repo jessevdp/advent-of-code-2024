@@ -17,6 +17,23 @@ class CharacterGrid
     @rows[coordinate.y][coordinate.x]
   end
 
+  def value_at(x, y, length, direction : CharacterGrid::Direction)
+    value_at(CharacterGrid::Coordinate.new(x, y), length, direction)
+  end
+
+  def value_at(coordinate, length, direction : CharacterGrid::Direction)
+    coordinates = [coordinate]
+    (length - 1).times do
+      coordinates << coordinates.last + direction
+    end
+
+    return unless coordinates.all? { |c| contains?(c) }
+
+    coordinates.map do |coordinate|
+      cell_at(coordinate).not_nil!.content
+    end.join
+  end
+
   def contains?(coordinate)
     return false if coordinate.x < 0 || coordinate.x >= width
     return false if coordinate.y < 0 || coordinate.y >= height
@@ -39,11 +56,51 @@ class CharacterGrid::Coordinate
   getter y : Int32
   def initialize(@x, @y)
   end
+
+  def +(direction : CharacterGrid::Direction)
+    CharacterGrid::Coordinate.new(
+      x: x + direction.x_offset,
+      y: y + direction.y_offset,
+    )
+  end
 end
 
 class CharacterGrid::Cell
   getter content : Char
 
   def initialize(@content)
+  end
+end
+
+enum CharacterGrid::Direction
+  Up
+  UpRight
+  Right
+  DownRight
+  Down
+  DownLeft
+  Left
+  UpLeft
+
+  def x_offset
+    case self
+    when .right?, .up_right?, .down_right?
+      1
+    when .left?, .up_left?, .down_left?
+      -1
+    else
+      0
+    end
+  end
+
+  def y_offset
+    case self
+    when .down?, .down_right?, .down_left?
+      1
+    when .up?, .up_right?, .up_left?
+      -1
+    else
+      0
+    end
   end
 end
