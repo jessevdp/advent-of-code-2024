@@ -8,6 +8,10 @@ class CharacterGrid
     end
   end
 
+  def cells
+    @rows.flatten
+  end
+
   def cell_at(x, y)
     cell_at(Coordinate.new(x, y))
   end
