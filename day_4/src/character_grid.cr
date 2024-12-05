@@ -1,9 +1,10 @@
 class CharacterGrid
-  @rows : Array(Array(Cell))
-
   def initialize(lines)
-    @rows = lines.map do |line|
-      line.chars.map { |char| Cell.new(char) }
+    @rows = [] of Array(Cell)
+    @rows = lines.map_with_index do |line, y|
+      line.chars.map_with_index do |char, x|
+        Cell.new(char, Coordinate.new(x, y), grid: self)
+      end
     end
   end
 
@@ -68,7 +69,10 @@ end
 class CharacterGrid::Cell
   getter content : Char
 
-  def initialize(@content)
+  @coordinate : Coordinate
+  @grid : CharacterGrid
+
+  def initialize(@content, @coordinate, @grid)
   end
 end
 
@@ -104,3 +108,4 @@ enum CharacterGrid::Direction
     end
   end
 end
+
