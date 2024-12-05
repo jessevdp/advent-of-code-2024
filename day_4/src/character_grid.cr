@@ -1,14 +1,14 @@
 class CharacterGrid
-  @rows : Array(Array(CharacterGrid::Cell))
+  @rows : Array(Array(Cell))
 
   def initialize(lines)
     @rows = lines.map do |line|
-      line.chars.map { |char| CharacterGrid::Cell.new(char) }
+      line.chars.map { |char| Cell.new(char) }
     end
   end
 
   def cell_at(x, y)
-    cell_at(CharacterGrid::Coordinate.new(x, y))
+    cell_at(Coordinate.new(x, y))
   end
 
   def cell_at(coordinate)
@@ -17,11 +17,11 @@ class CharacterGrid
     @rows[coordinate.y][coordinate.x]
   end
 
-  def value_at(x, y, length, direction : CharacterGrid::Direction)
-    value_at(CharacterGrid::Coordinate.new(x, y), length, direction)
+  def value_at(x, y, length, direction : Direction)
+    value_at(Coordinate.new(x, y), length, direction)
   end
 
-  def value_at(coordinate, length, direction : CharacterGrid::Direction)
+  def value_at(coordinate, length, direction : Direction)
     coordinates = [coordinate]
     (length - 1).times do
       coordinates << coordinates.last + direction
@@ -57,8 +57,8 @@ class CharacterGrid::Coordinate
   def initialize(@x, @y)
   end
 
-  def +(direction : CharacterGrid::Direction)
-    CharacterGrid::Coordinate.new(
+  def +(direction : Direction)
+    self.class.new(
       x: x + direction.x_offset,
       y: y + direction.y_offset,
     )
