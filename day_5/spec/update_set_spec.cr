@@ -46,4 +46,26 @@ describe UpdateSet do
       UpdateSet.build([75, 29, 13], ordering_rules).middle_page_number.value.should eq(29)
     end
   end
+
+  describe "in_correct_order" do
+    it "re-orders page numbers according to the ordering rules" do
+      UpdateSet.build([75, 97, 47, 61, 53], ordering_rules)
+        .in_correct_order
+        .page_numbers
+        .map(&.value)
+        .should eq([97, 75, 47, 61, 53])
+
+      UpdateSet.build([61, 13, 29], ordering_rules)
+        .in_correct_order
+        .page_numbers
+        .map(&.value)
+        .should eq([61, 29, 13])
+
+      UpdateSet.build([97, 13, 75, 29, 47], ordering_rules)
+        .in_correct_order
+        .page_numbers
+        .map(&.value)
+        .should eq([97, 75, 47, 29, 13])
+    end
+  end
 end

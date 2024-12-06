@@ -59,7 +59,7 @@ class PageNumber
 end
 
 class UpdateSet
-  @page_numbers : Array(PageNumber)
+  getter page_numbers : Array(PageNumber)
 
   def initialize(@page_numbers)
   end
@@ -83,6 +83,17 @@ class UpdateSet
     end
 
     true
+  end
+
+  def in_correct_order
+    return self if correctly_ordered?
+
+    sorted_page_numbers = @page_numbers.sort_by! do |page_number|
+      others = @page_numbers.reject { |n| n == page_number }
+      page_number.prior_page_numbers_by_rule(others).size
+    end
+
+    UpdateSet.new(sorted_page_numbers)
   end
 
   def middle_page_number
