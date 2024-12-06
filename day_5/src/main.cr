@@ -76,7 +76,7 @@ class UpdateSet
   end
 
   def middle_page_number
-    middle_index = (@page_numbers.size / 2).round.to_i - 1
+    middle_index = (@page_numbers.size / 2).floor.to_i
     @page_numbers[middle_index]
   end
 end
@@ -106,7 +106,6 @@ update_sets = raw_update_sets.map do |raw_update_set|
   raw_page_numbers = raw_update_set.split(',').map(&.to_i)
   UpdateSet.build(raw_page_numbers, ordering_rules)
 end
-
 
 total = 0
 update_sets.each do |update_set|

@@ -38,4 +38,12 @@ describe UpdateSet do
       UpdateSet.build([97, 13, 75, 29, 47], ordering_rules).correctly_ordered?.should be_false
     end
   end
+
+  describe "#middle_page_number" do
+    it "works" do
+      UpdateSet.build([75, 47, 61, 53, 29], ordering_rules).middle_page_number.value.should eq(61)
+      UpdateSet.build([97, 61, 53, 29, 13], ordering_rules).middle_page_number.value.should eq(53)
+      UpdateSet.build([75, 29, 13], ordering_rules).middle_page_number.value.should eq(29)
+    end
+  end
 end
