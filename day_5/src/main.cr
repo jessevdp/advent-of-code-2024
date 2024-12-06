@@ -29,22 +29,32 @@ class PageNumber
     others = previous + upcoming
     relevant_ordering_rules = @ordering_rules.select { |rule| rule.involves_any?(others) }
 
-    prior_page_numbers_by_rule = relevant_ordering_rules
-      .select { |rule| self == rule.after }
-      .map(&.before)
-
-    subsequent_page_numbers_by_rule = relevant_ordering_rules
-      .select { |rule| self == rule.before }
-      .map(&.after)
-
-    return false unless prior_page_numbers_by_rule.all? { |n| n.in?(previous) }
-    return false unless subsequent_page_numbers_by_rule.all? { |n| n.in?(upcoming) }
+    return false unless prior_page_numbers_by_rule(others).all? { |n| n.in?(previous) }
+    return false unless subsequent_page_numbers_by_rule(others).all? { |n| n.in?(upcoming) }
 
     true
   end
 
+  def prior_page_numbers_by_rule(others)
+    @ordering_rules
+      .select { |rule| rule.involves_any?(others) }
+      .select { |rule| self == rule.after }
+      .map { |rule| others.find! { |n| n == rule.before } }
+  end
+
+  def subsequent_page_numbers_by_rule(others)
+    @ordering_rules
+      .select { |rule| rule.involves_any?(others) }
+      .select { |rule| self == rule.before }
+      .map { |rule| others.find! { |n| n == rule.after } }
+  end
+
   def ==(page_number : Int32)
     @value == page_number
+  end
+
+  def ==(other : PageNumber)
+    @value == other.value
   end
 end
 
