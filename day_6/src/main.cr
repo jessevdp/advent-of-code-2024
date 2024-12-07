@@ -70,6 +70,37 @@ enum Grid::Cell
   Empty
 end
 
+class Patrol
+  @grid : Grid
+  @start_position : Coordinate
+  @start_direction : Direction
+
+  getter visited_coordinates
+
+  def initialize(@grid, @start_position, @start_direction)
+    @visited_coordinates = Set(Coordinate).new
+  end
+
+  def simulate
+    @visited_coordinates.clear
+
+    current_direction = @start_direction
+    current_position = @start_position
+    while current_position.in_bounds_of?(@grid)
+      @visited_coordinates << current_position
+      next_position = current_position + current_direction
+
+      if @grid.cell_at(next_position) == Grid::Cell::Obstacle
+        current_direction = current_direction.next_direction
+      else
+        current_position = next_position
+      end
+    end
+
+    @visited_coordinates
+  end
+end
+
 lines = if ARGV.size > 0
   filepath = ARGV.first
   File.read_lines(filepath)
@@ -77,13 +108,13 @@ else
   [] of String
 end
 
-initial_position = Coordinate.new(x: 0, y: 0)
+start_position = Coordinate.new(x: 0, y: 0)
 rows = lines.map_with_index do |line, y|
   line.chars.map_with_index do |char, x|
     case char
     when '#' then Grid::Cell::Obstacle
     when '^'
-      initial_position = Coordinate.new(x, y)
+      start_position = Coordinate.new(x, y)
       Grid::Cell::Empty
     else Grid::Cell::Empty
     end
@@ -91,21 +122,9 @@ rows = lines.map_with_index do |line, y|
 end
 
 grid = Grid.new(rows)
-direction = Direction::Up
-current_position = initial_position
-visited = Set(Coordinate).new
-
-while current_position.in_bounds_of?(grid)
-  visited << current_position
-  next_position = current_position + direction
-
-  if grid.cell_at(next_position) == Grid::Cell::Obstacle
-    direction = direction.next_direction
-  else
-    current_position = next_position
-  end
-end
+patrol = Patrol.new(grid, start_position, Direction::Up)
 
 puts "Part 1:"
-puts visited.size
+patrol.simulate
+puts patrol.visited_coordinates.size
 
