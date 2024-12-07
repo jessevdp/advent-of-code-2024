@@ -57,11 +57,21 @@ class Grid
     @rows[coordinate.y][coordinate.x]
   end
 
+  def replace_cell(coordinate : Coordinate, cell : Cell)
+    return unless in_bounds?(coordinate)
+
+    @rows[coordinate.y][coordinate.x] = cell
+  end
+
   def in_bounds?(coordinate : Coordinate)
     return false if coordinate.x < 0 || coordinate.x >= @width
     return false if coordinate.y < 0 || coordinate.y >= @height
 
     true
+  end
+
+  def clone
+    Grid.new(@rows.clone)
   end
 end
 
@@ -77,25 +87,33 @@ class Patrol
 
   def initialize(@grid, @start_position, @start_direction)
     @log = Set(Tuple(Coordinate, Direction)).new
+    @current_position = @start_position
+    @current_direction = @start_direction
   end
 
   def simulate
     @log.clear
+    @current_position = @start_position
+    @current_direction = @start_direction
 
-    current_direction = @start_direction
-    current_position = @start_position
-    while current_position.in_bounds_of?(@grid)
-      @log << { current_position, current_direction }
-      next_position = current_position + current_direction
+    while @current_position.in_bounds_of?(@grid)
+      break if stuck_in_loop?
+
+      @log << { @current_position, @current_direction }
+      next_position = @current_position + @current_direction
 
       if @grid.cell_at(next_position) == Grid::Cell::Obstacle
-        current_direction = current_direction.next_direction
+        @current_direction = @current_direction.next_direction
       else
-        current_position = next_position
+        @current_position = next_position
       end
     end
 
     @log
+  end
+
+  def stuck_in_loop?
+    @log.includes?({ @current_position, @current_direction })
   end
 
   def visited_coordinates
@@ -133,4 +151,14 @@ patrol = Patrol.new(grid, start_position, Direction::Up)
 puts "Part 1:"
 patrol.simulate
 puts patrol.visited_coordinates.size
+
+puts "Part 2:"
+simulations = patrol.visited_coordinates.reject(start_position).map do |coordinate|
+  changed_grid = grid.clone
+  changed_grid.replace_cell(coordinate, Grid::Cell::Obstacle)
+  patrol = Patrol.new(changed_grid, start_position, Direction::Up)
+  patrol.simulate
+  patrol
+end
+puts simulations.count(&.stuck_in_loop?)
 
