@@ -75,19 +75,17 @@ class Patrol
   @start_position : Coordinate
   @start_direction : Direction
 
-  getter visited_coordinates
-
   def initialize(@grid, @start_position, @start_direction)
-    @visited_coordinates = Set(Coordinate).new
+    @log = Set(Tuple(Coordinate, Direction)).new
   end
 
   def simulate
-    @visited_coordinates.clear
+    @log.clear
 
     current_direction = @start_direction
     current_position = @start_position
     while current_position.in_bounds_of?(@grid)
-      @visited_coordinates << current_position
+      @log << { current_position, current_direction }
       next_position = current_position + current_direction
 
       if @grid.cell_at(next_position) == Grid::Cell::Obstacle
@@ -97,7 +95,15 @@ class Patrol
       end
     end
 
-    @visited_coordinates
+    @log
+  end
+
+  def visited_coordinates
+    coordinates = Set(Coordinate).new
+    @log.each do |coordinate, _direction|
+      coordinates << coordinate
+    end
+    coordinates
   end
 end
 
