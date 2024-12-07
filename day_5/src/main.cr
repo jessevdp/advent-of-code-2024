@@ -128,12 +128,16 @@ update_sets = raw_update_sets.map do |raw_update_set|
   UpdateSet.build(raw_page_numbers, ordering_rules)
 end
 
-total = 0
-update_sets.each do |update_set|
-  if update_set.correctly_ordered?
-    total += update_set.middle_page_number.value
-  end
-end
-
 puts "Part 1:"
-puts total
+part_one = update_sets
+  .select(&.correctly_ordered?)
+  .sum { |set| set.middle_page_number.value }
+puts part_one
+
+puts "Part 2:"
+part_two = update_sets
+  .reject(&.correctly_ordered?)
+  .map(&.in_correct_order)
+  .sum { |set| set.middle_page_number.value }
+puts part_two
+
