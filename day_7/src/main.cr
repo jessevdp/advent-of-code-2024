@@ -55,7 +55,11 @@ end
 
 class ConcationationOperation < Operation
   def result : Int64
-    "#{@a.result}#{@b.result}".to_i64
+    a = @a.result
+    b = @b.result
+    digits_in_b = Math.log10(b.abs).ceil.to_i
+
+    (a * (10 ** digits_in_b)) + b
   end
 end
 
