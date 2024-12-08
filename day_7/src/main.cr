@@ -7,6 +7,15 @@ class Equation
   end
 
   def possible?
+    {{Operation.all_subclasses}}.each_repeated_permutation(@numbers.size - 1) do |operations|
+      numbers = @numbers.dup
+      expression = numbers.shift
+      operations.each do |operation|
+        expression = operation.new(expression, numbers.shift)
+      end
+      return true if expression.result == @result
+    end
+
     false
   end
 end
