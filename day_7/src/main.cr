@@ -8,10 +8,10 @@ class Equation
 
   def possible?
     {{Operation.all_subclasses}}.each_repeated_permutation(@numbers.size - 1) do |operations|
-      numbers = @numbers.dup
-      expression = numbers.shift
+      numbers = @numbers.each
+      expression = numbers.next.as(Expression)
       operations.each do |operation|
-        expression = operation.new(expression, numbers.shift)
+        expression = operation.new(expression, numbers.next.as(Expression))
       end
       return true if expression.result == @result
     end
@@ -55,7 +55,7 @@ end
 
 class ConcationationOperation < Operation
   def result : Int64
-    (@a.result.to_s + @b.result.to_s).to_i64
+    "#{@a.result}#{@b.result}".to_i64
   end
 end
 
