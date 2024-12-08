@@ -53,6 +53,12 @@ class MultiplyOperation < Operation
   end
 end
 
+class ConcationationOperation < Operation
+  def result : Int64
+    (@a.result.to_s + @b.result.to_s).to_i64
+  end
+end
+
 lines = if ARGV.size > 0
   filepath = ARGV.first
   File.read_lines(filepath)
@@ -66,6 +72,6 @@ equations = lines.map do |line|
   Equation.new(result, numbers)
 end
 
-puts "Part 1:"
+puts "Part 2:"
 puts equations.select(&.possible?).sum(&.result)
 
