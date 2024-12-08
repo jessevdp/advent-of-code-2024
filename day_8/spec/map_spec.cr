@@ -18,7 +18,7 @@ describe Map do
         "............",
       ]
       map = MapParser.new(lines).parse
-      map.antinode_locations.size.should eq(14)
+      map.antinode_locations.size.should eq(34)
     end
   end
 end

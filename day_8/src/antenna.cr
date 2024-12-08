@@ -5,12 +5,12 @@ class Antenna
   def initialize(@frequency, @location)
   end
 
-  def antinodes(other)
-    delta = other.location - location
-    [
-      location - delta,
-      other.location + delta,
-    ]
-  end
+  # def antinodes(other)
+  #   delta = other.location - location
+  #   [
+  #     location - delta,
+  #     other.location + delta,
+  #   ]
+  # end
 end
 

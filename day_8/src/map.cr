@@ -28,9 +28,18 @@ class Map
   def antinodes_for(antenna_1, antenna_2)
     antinodes = Set(Point).new
 
-    antenna_1.antinodes(antenna_2).each do |antinode|
-      next unless in_bounds?(antinode)
-      antinodes << antinode
+    delta = antenna_2.location - antenna_1.location
+
+    location = antenna_1.location
+    while in_bounds?(location)
+      antinodes << location
+      location += delta
+    end
+
+    location = antenna_1.location - delta
+    while in_bounds?(location)
+      antinodes << location
+      location -= delta
     end
 
     antinodes

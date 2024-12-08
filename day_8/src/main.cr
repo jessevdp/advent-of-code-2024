@@ -12,6 +12,6 @@ end
 
 map = MapParser.new(lines).parse
 
-puts "Part 1:"
+puts "Part 2:"
 puts map.antinode_locations.size
 
