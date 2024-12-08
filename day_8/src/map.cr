@@ -18,11 +18,19 @@ class Map
 
     @antennas.group_by(&.frequency).each do |frequency, antennas|
       antennas.each_combination(2) do |(antenna_1, antenna_2)|
-        antenna_1.antinodes(antenna_2).each do |antinode|
-          next unless in_bounds?(antinode)
-          antinodes << antinode
-        end
+        antinodes += antinodes_for(antenna_1, antenna_2)
       end
+    end
+
+    antinodes
+  end
+
+  def antinodes_for(antenna_1, antenna_2)
+    antinodes = Set(Point).new
+
+    antenna_1.antinodes(antenna_2).each do |antinode|
+      next unless in_bounds?(antinode)
+      antinodes << antinode
     end
 
     antinodes
