@@ -20,8 +20,12 @@ class Disk
 end
 
 module Disk::Block
-  abstract def file? : Bool
   abstract def checksum_value : Int32
+  abstract def file? : Bool
+
+  def free? : Bool
+    !file?
+  end
 end
 
 record Disk::FileBlock, file_id : Int32 do

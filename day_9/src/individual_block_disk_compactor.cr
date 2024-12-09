@@ -1,10 +1,13 @@
 class IndividualBlockDiskCompactor < DiskCompactor
   def compact : Array(Disk::Block)
-    @blocks.each_index do |index|
-      next if @blocks[index].file?
-      last_file_block_index = find_last_file_block_index
-      break if index >= last_file_block_index
-      swap(index, last_file_block_index)
+    head = -1
+    tail = @blocks.size
+    while head < tail
+      head = find_free_block_index_after(head)
+      tail = find_file_block_index_before(tail)
+      break unless head && tail
+      break if head > tail
+      swap(head, tail)
     end
     @blocks
   end
@@ -15,7 +18,11 @@ class IndividualBlockDiskCompactor < DiskCompactor
     @blocks[b_index] = a
   end
 
-  private def find_last_file_block_index
-    @blocks.rindex { |block| block.file? }.not_nil!
+  private def find_file_block_index_before(offset)
+    @blocks.rindex(offset - 1, &.file?)
+  end
+
+  private def find_free_block_index_after(offset)
+    @blocks.index(offset + 1, &.free?)
   end
 end
