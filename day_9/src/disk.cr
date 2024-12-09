@@ -8,8 +8,8 @@ class Disk
     DiskMapParser.new(raw_disk_map).parse
   end
 
-  def compact
-    @blocks = DiskCompactor.new(@blocks).compact
+  def compact(strategy : DiskCompactor.class)
+    @blocks = strategy.new(@blocks).compact
   end
 
   def checksum
@@ -46,5 +46,12 @@ record Disk::FreeBlock do
   def checksum_value : Int32
     0
   end
+end
+
+abstract class DiskCompactor
+  def initialize(@blocks : Array(Disk::Block))
+  end
+
+  abstract def compact : Array(Disk::Block)
 end
 

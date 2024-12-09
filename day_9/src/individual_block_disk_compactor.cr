@@ -1,8 +1,5 @@
-class DiskCompactor
-  def initialize(@blocks : Array(Disk::Block))
-  end
-
-  def compact
+class IndividualBlockDiskCompactor < DiskCompactor
+  def compact : Array(Disk::Block)
     @blocks.each_index do |index|
       next if @blocks[index].file?
       last_file_block_index = find_last_file_block_index

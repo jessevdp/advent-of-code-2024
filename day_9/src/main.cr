@@ -1,6 +1,6 @@
 require "./disk"
 require "./disk_map_parser"
-require "./disk_compactor"
+require "./individual_block_disk_compactor"
 
 line = if ARGV.size > 0
   filepath = ARGV.first
@@ -9,9 +9,8 @@ else
   ""
 end
 
-disk = Disk.from_disk_map(line)
-
 puts "Part 1:"
-disk.compact
+disk = Disk.from_disk_map(line)
+disk.compact(IndividualBlockDiskCompactor)
 puts disk.checksum
 
