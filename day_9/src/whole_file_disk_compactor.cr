@@ -1,13 +1,71 @@
 class WholeFileDiskCompactor < DiskCompactor
   def compact : Array(Disk::Block)
-    initial_file_map = file_map
+    files_to_consider = file_map.sort_by(&.id).reverse
+
+    head = -1
+    while head < @blocks.size
+      gap = find_gap_after(head)
+      break unless gap
+
+      file = files_to_consider.find do |file|
+        (gap.size >= file.size) && (file.start > gap.start)
+      end
+
+      if file
+        head = gap.start + (file.size - 1)
+        swap_file_into_gap(file, gap)
+        files_to_consider.delete(file)
+      else
+        head = gap.end
+      end
+    end
+
     @blocks
   end
 
-  private record File, id : Int32, block_indexes : Array(Int32) do
+  private module BlockSequence
+    abstract def indexes : Array(Int32)
+
     def size
-      @block_indexes.size
+      indexes.size
     end
+
+    def start
+      indexes.first
+    end
+
+    def end
+      indexes.last
+    end
+  end
+
+  private record Gap, indexes : Array(Int32) do
+    include BlockSequence
+  end
+
+  private record File, id : Int32, indexes : Array(Int32) do
+    include BlockSequence
+  end
+
+  private def swap_file_into_gap(file : File, gap : Gap)
+    return unless gap.size >= file.size
+
+    gap = Gap.new(gap.indexes.first(file.size))
+    swap(file, gap)
+  end
+
+  private def swap(a : BlockSequence, b : BlockSequence)
+    return unless a.size == b.size
+
+    a.indexes.zip(b.indexes).each do |(a_index, b_index)|
+      swap(a_index, b_index)
+    end
+  end
+
+  private def swap(a_index : Int32, b_index : Int32)
+    a = @blocks[a_index]
+    @blocks[a_index] = @blocks[b_index]
+    @blocks[b_index] = a
   end
 
   private def file_map
@@ -25,6 +83,21 @@ class WholeFileDiskCompactor < DiskCompactor
     end
 
     files
+  end
+
+  private def find_gap_after(index)
+    if gap_start = find_free_block_index_after(index)
+      gap_end = (find_file_block_index_after(gap_start) || @blocks.size) - 1
+      Gap.new((gap_start..gap_end).to_a)
+    end
+  end
+
+  private def find_free_block_index_after(offset)
+    @blocks.index(offset + 1, &.free?)
+  end
+
+  private def find_file_block_index_after(offset)
+    @blocks.index(offset + 1, &.file?)
   end
 end
 
