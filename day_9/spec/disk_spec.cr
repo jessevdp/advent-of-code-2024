@@ -1,6 +1,14 @@
 require "./spec_helper"
 
 describe Disk do
+  describe "#checksum" do
+    it "calculates the checksum" do
+      disk = Disk.from_disk_map("2333133121414131402")
+      disk.compact
+      disk.checksum.should eq(1928)
+    end
+  end
+
   describe "#compact" do
     it "fills up all free spaces in between file blocks by moving file blocks starting from the end" do
       disk = Disk.from_disk_map("2333133121414131402")

@@ -11,10 +11,17 @@ class Disk
   def compact
     @blocks = DiskCompactor.new(@blocks).compact
   end
+
+  def checksum
+    @blocks
+      .map_with_index { |block, index| index * block.checksum_value }
+      .sum(0_i64)
+  end
 end
 
 module Disk::Block
   abstract def file? : Bool
+  abstract def checksum_value : Int32
 end
 
 record Disk::FileBlock, file_id : Int32 do
@@ -23,6 +30,10 @@ record Disk::FileBlock, file_id : Int32 do
   def file? : Bool
     true
   end
+
+  def checksum_value : Int32
+    file_id
+  end
 end
 
 record Disk::FreeBlock do
@@ -30,6 +41,10 @@ record Disk::FreeBlock do
 
   def file? : Bool
     false
+  end
+
+  def checksum_value : Int32
+    0
   end
 end
 
