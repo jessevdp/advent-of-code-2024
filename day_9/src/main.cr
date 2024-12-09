@@ -1,6 +1,7 @@
 require "./disk"
 require "./disk_map_parser"
 require "./individual_block_disk_compactor"
+require "./whole_file_disk_compactor"
 
 line = if ARGV.size > 0
   filepath = ARGV.first
