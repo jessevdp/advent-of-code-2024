@@ -39,6 +39,7 @@ describe Disk do
           Disk::FreeBlock.new,
           Disk::FileBlock.new(file_id: 4),
           Disk::FileBlock.new(file_id: 4),
+          Disk::FreeBlock.new,
           Disk::FileBlock.new(file_id: 3),
           Disk::FileBlock.new(file_id: 3),
           Disk::FileBlock.new(file_id: 3),

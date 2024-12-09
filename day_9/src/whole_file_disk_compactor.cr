@@ -2,22 +2,14 @@ class WholeFileDiskCompactor < DiskCompactor
   def compact : Array(Disk::Block)
     files_to_consider = file_map.sort_by(&.id).reverse
 
-    head = -1
-    while head < @blocks.size
-      gap = find_gap_after(head)
-      break unless gap
+    while files_to_consider.any?
+      file = files_to_consider.shift
+      gap = find_gap_of_size(file.size)
 
-      file = files_to_consider.find do |file|
-        (gap.size >= file.size) && (file.start > gap.start)
-      end
+      next unless gap
+      next if gap.start > file.start
 
-      if file
-        head = gap.start + (file.size - 1)
-        swap_file_into_gap(file, gap)
-        files_to_consider.delete(file)
-      else
-        head = gap.end
-      end
+      swap_file_into_gap(file, gap)
     end
 
     @blocks
@@ -83,6 +75,16 @@ class WholeFileDiskCompactor < DiskCompactor
     end
 
     files
+  end
+
+  private def find_gap_of_size(size)
+    head = -1
+    while head < @blocks.size
+      gap = find_gap_after(head)
+      break unless gap
+      return gap if gap.size >= size
+      head = gap.end
+    end
   end
 
   private def find_gap_after(index)

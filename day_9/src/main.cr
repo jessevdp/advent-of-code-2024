@@ -15,3 +15,8 @@ disk = Disk.from_disk_map(line)
 disk.compact(IndividualBlockDiskCompactor)
 puts disk.checksum
 
+puts "Part 2:"
+disk = Disk.from_disk_map(line)
+disk.compact(WholeFileDiskCompactor)
+puts disk.checksum
+
