@@ -11,5 +11,5 @@ end
 map = Map.from_input(lines)
 
 puts "Part 1:"
-puts map.trailheads.map { |point| point.reachable_trailends.size }.sum
+puts map.total_score
 

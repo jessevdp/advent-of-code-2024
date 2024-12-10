@@ -65,5 +65,22 @@ describe Map do
       ])
     end
   end
+
+  describe "#total_score" do
+    it "returns the sum of the score (amount of reachable trailends) for each trailhead" do
+      lines = [
+        "89010123",
+        "78121874",
+        "87430965",
+        "96549874",
+        "45678903",
+        "32019012",
+        "01329801",
+        "10456732",
+      ]
+      map = Map.from_input(lines)
+      map.total_score.should eq(36)
+    end
+  end
 end
 

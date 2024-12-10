@@ -14,6 +14,10 @@ class Point
     @height == 9
   end
 
+  def score
+    reachable_trailends.size
+  end
+
   def reachable_neighbours
     @neighbours.select { |neighbour| (neighbour.height - @height) == 1 }
   end

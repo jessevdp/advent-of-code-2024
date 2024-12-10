@@ -23,6 +23,10 @@ class Map
     new(rows)
   end
 
+  def total_score
+    trailheads.map(&.score).sum
+  end
+
   def trailheads
     points.select(&.trailhead?)
   end
