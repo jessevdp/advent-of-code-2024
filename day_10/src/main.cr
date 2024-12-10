@@ -14,3 +14,6 @@ map = Map.from_input(lines)
 puts "Part 1:"
 puts map.total_score
 
+puts "Part 2:"
+puts map.total_rating
+
