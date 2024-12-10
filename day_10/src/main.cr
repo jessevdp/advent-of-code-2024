@@ -1,4 +1,5 @@
 require "./point"
+require "./trail"
 require "./map"
 
 lines = if ARGV.size > 0

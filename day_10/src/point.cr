@@ -33,5 +33,19 @@ class Point
 
     trailends
   end
+
+  def trails
+    return [Trail.new([self])] if trailend?
+
+    trails = [] of Trail
+    reachable_neighbours.each do |neighbour|
+      neighbour.trails.each do |trail|
+        trail = trail + self
+        trails << trail
+      end
+    end
+
+    trails
+  end
 end
 
