@@ -2,6 +2,16 @@ class Map
   @rows : Array(Array(Point))
 
   def initialize(@rows)
+    @rows.each_with_index do |row, y|
+      row.each_with_index do |point, x|
+        point.neighbours = [
+          point(x: x, y: y - 1),
+          point(x: x - 1, y: y),
+          point(x: x + 1, y: y),
+          point(x: x, y: y + 1),
+        ].compact
+      end
+    end
   end
 
   def self.from_input(lines : Array(String))
