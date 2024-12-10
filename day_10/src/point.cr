@@ -5,5 +5,9 @@ class Point
   def initialize(@height)
     @neighbours = [] of Point
   end
+
+  def trailhead?
+    @height == 0
+  end
 end
 

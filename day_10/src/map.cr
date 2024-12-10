@@ -23,6 +23,10 @@ class Map
     new(rows)
   end
 
+  def trailheads
+    points.select(&.trailhead?)
+  end
+
   def points
     @rows.flatten
   end

@@ -38,5 +38,32 @@ describe Map do
       ])
     end
   end
+
+  describe "#trailheads" do
+    it "returns all Points with height=0" do
+      lines = [
+        "89010123",
+        "78121874",
+        "87430965",
+        "96549874",
+        "45678903",
+        "32019012",
+        "01329801",
+        "10456732",
+      ]
+      map = Map.from_input(lines)
+      map.trailheads.should eq([
+        map.point!(x: 2, y: 0),
+        map.point!(x: 4, y: 0),
+        map.point!(x: 4, y: 2),
+        map.point!(x: 6, y: 4),
+        map.point!(x: 2, y: 5),
+        map.point!(x: 5, y: 5),
+        map.point!(x: 0, y: 6),
+        map.point!(x: 6, y: 6),
+        map.point!(x: 1, y: 7),
+      ])
+    end
+  end
 end
 
