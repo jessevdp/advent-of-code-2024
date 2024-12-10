@@ -9,5 +9,9 @@ class Point
   def trailhead?
     @height == 0
   end
+
+  def reachable_neighbours
+    @neighbours.select { |neighbour| (neighbour.height - @height) == 1 }
+  end
 end
 
