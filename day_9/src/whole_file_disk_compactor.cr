@@ -61,20 +61,19 @@ class WholeFileDiskCompactor < DiskCompactor
   end
 
   private def file_map
-    files = [] of File
+    file_block_indexes = Hash(Int32, Array(Int32)).new
 
-    file_ids = @blocks.select(Disk::FileBlock).map(&.file_id).to_set
-    file_ids.map do |file_id|
-      block_indexes = @blocks.each_with_index
-        .select { |block, _| block.is_a?(Disk::FileBlock) }
-        .map { |block, index| { block.as(Disk::FileBlock), index } }
-        .select { |block, _| block.file_id == file_id }
-        .map { |_, index| index }
-        .to_a
-      files << File.new(file_id, block_indexes)
+    head = -1
+    while head < @blocks.size
+      head = find_file_block_index_after(head)
+      break unless head
+      file_id = @blocks[head].as(Disk::FileBlock).file_id
+
+      file_block_indexes[file_id] ||= [] of Int32
+      file_block_indexes[file_id] << head
     end
 
-    files
+    file_block_indexes.map { |id, indexes| File.new(id, indexes) }
   end
 
   private def find_gap_of_size(size)
