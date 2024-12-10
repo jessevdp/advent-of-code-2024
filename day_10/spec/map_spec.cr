@@ -82,5 +82,22 @@ describe Map do
       map.total_score.should eq(36)
     end
   end
+
+  describe "#total_rating" do
+    it "returns the sum of the rating (amount of Trails) for each trailhead" do
+      lines = [
+        "89010123",
+        "78121874",
+        "87430965",
+        "96549874",
+        "45678903",
+        "32019012",
+        "01329801",
+        "10456732",
+      ]
+      map = Map.from_input(lines)
+      map.total_rating.should eq(81)
+    end
+  end
 end
 

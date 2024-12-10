@@ -27,6 +27,10 @@ class Map
     trailheads.map(&.score).sum
   end
 
+  def total_rating
+    trailheads.map(&.rating).sum
+  end
+
   def trailheads
     points.select(&.trailhead?)
   end

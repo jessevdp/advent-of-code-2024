@@ -18,6 +18,10 @@ class Point
     reachable_trailends.size
   end
 
+  def rating
+    trails.size
+  end
+
   def reachable_neighbours
     @neighbours.select { |neighbour| (neighbour.height - @height) == 1 }
   end
