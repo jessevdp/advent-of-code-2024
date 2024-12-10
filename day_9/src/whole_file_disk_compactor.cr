@@ -1,15 +1,24 @@
 class WholeFileDiskCompactor < DiskCompactor
   def compact : Array(Disk::Block)
-    files_to_consider = file_map.sort_by(&.id).reverse
+    files_to_consider = all_files.sort_by(&.id).reverse
+    gaps = all_gaps
 
     while files_to_consider.any?
       file = files_to_consider.shift
-      gap = find_gap_of_size(file.size)
 
-      next unless gap
-      next if gap.start > file.start
+      gap_index = gaps.index do |gap|
+        (gap.size >= file.size) && (file.start > gap.start)
+      end
+      next unless gap_index
 
-      swap_file_into_gap(file, gap)
+      gap = gaps[gap_index]
+      remaining_gap = swap_file_into_gap(file, gap)
+
+      if remaining_gap
+        gaps[gap_index] = remaining_gap
+      else
+        gaps.delete_at(gap_index)
+      end
     end
 
     @blocks
@@ -40,10 +49,14 @@ class WholeFileDiskCompactor < DiskCompactor
   end
 
   private def swap_file_into_gap(file : File, gap : Gap)
-    return unless gap.size >= file.size
+    return gap unless gap.size >= file.size
 
-    gap = Gap.new(gap.indexes.first(file.size))
-    swap(file, gap)
+    rightsized_gap = Gap.new(gap.indexes.first(file.size))
+    remaining_gap = Gap.new(gap.indexes - rightsized_gap.indexes)
+
+    swap(file, rightsized_gap)
+
+    remaining_gap
   end
 
   private def swap(a : BlockSequence, b : BlockSequence)
@@ -60,7 +73,7 @@ class WholeFileDiskCompactor < DiskCompactor
     @blocks[b_index] = a
   end
 
-  private def file_map
+  private def all_files
     file_block_indexes = Hash(Int32, Array(Int32)).new
 
     head = -1
@@ -76,14 +89,18 @@ class WholeFileDiskCompactor < DiskCompactor
     file_block_indexes.map { |id, indexes| File.new(id, indexes) }
   end
 
-  private def find_gap_of_size(size)
+  private def all_gaps
+    gaps = [] of Gap
+
     head = -1
     while head < @blocks.size
       gap = find_gap_after(head)
       break unless gap
-      return gap if gap.size >= size
-      head = gap.end
+      head = gap.end + 1
+      gaps << gap
     end
+
+    gaps
   end
 
   private def find_gap_after(index)
