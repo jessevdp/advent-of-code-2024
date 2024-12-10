@@ -1,0 +1,3 @@
+require "./point"
+require "./map"
+
