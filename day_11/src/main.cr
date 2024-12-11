@@ -15,6 +15,17 @@ record Stone, value : Int32 do
   end
 end
 
+class StoneSet
+  getter stones : Array(Stone)
+
+  def initialize(@stones)
+  end
+
+  def evolve
+    @stones = @stones.flat_map(&.evolve)
+  end
+end
+
 abstract class EvolutionRule
   abstract def applies_to?(stone : Stone) : Bool
   abstract def apply_to(stone : Stone) : Array(Stone)
