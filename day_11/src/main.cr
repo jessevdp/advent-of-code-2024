@@ -94,3 +94,10 @@ part_one_set = StoneSet.new(initial_stones)
 end
 puts part_one_set.stones.size
 
+puts "Part 2:"
+part_two_set = StoneSet.new(initial_stones)
+75.times do
+  part_two_set.evolve
+end
+puts part_two_set.stones.size
+
