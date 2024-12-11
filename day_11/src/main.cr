@@ -1,4 +1,19 @@
-record Stone, value : Int32
+record Stone, value : Int32 do
+  EVOLUTION_RULES = [
+    ZeroToOneEvolution.new,
+    SplitEvenDigitsEvolution.new,
+  ]
+  FALLBACK_EVOLUTION_RULE = AlwaysMultiplyEvolution.new(factor: 2024)
+
+  def evolve
+    evolution_rule.apply_to(self)
+  end
+
+  private def evolution_rule
+    rule = EVOLUTION_RULES.find { |rule| rule.applies_to?(self) }
+    rule || FALLBACK_EVOLUTION_RULE
+  end
+end
 
 abstract class EvolutionRule
   abstract def applies_to?(stone : Stone) : Bool
