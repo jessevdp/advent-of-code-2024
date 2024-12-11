@@ -1,4 +1,4 @@
-record Stone, value : Int32 do
+record Stone, value : Int64 do
   EVOLUTION_RULES = [
     ZeroToOneEvolution.new,
     SplitEvenDigitsEvolution.new,
@@ -64,7 +64,7 @@ class SplitEvenDigitsEvolution < EvolutionRule
 end
 
 class AlwaysMultiplyEvolution < EvolutionRule
-  def initialize(@factor : Int32)
+  def initialize(@factor : Int64)
   end
 
   def applies_to?(stone : Stone) : Bool
