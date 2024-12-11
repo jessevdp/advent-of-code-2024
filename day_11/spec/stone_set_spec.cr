@@ -86,9 +86,7 @@ describe StoneSet do
       ])
 
       set = StoneSet.new([Stone.new(125), Stone.new(17)])
-      25.times do
-        set.evolve
-      end
+      set.evolve(25)
       set.stones.size.should eq(55312)
     end
   end

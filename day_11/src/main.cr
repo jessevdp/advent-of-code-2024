@@ -5,8 +5,26 @@ record Stone, value : Int64 do
   ]
   FALLBACK_EVOLUTION_RULE = AlwaysMultiplyEvolution.new(factor: 2024)
 
-  def evolve
-    evolution_rule.apply_to(self)
+  def evolve(generations = 1, cache = EvolutionCache.new)
+    return [self] if generations <= 0
+
+    cached = cache.find(self, generations)
+
+    if cached
+      puts "cached generations=#{generations} #{value}"
+      return cached
+    end
+
+    puts "miss generations=#{generations} #{value}"
+
+    next_generation = evolution_rule.apply_to(self)
+    result = next_generation.flat_map do |stone|
+      stone.evolve(generations - 1, cache)
+    end
+
+    cache.add(self, generations, result)
+
+    result
   end
 
   private def evolution_rule
@@ -15,14 +33,29 @@ record Stone, value : Int64 do
   end
 end
 
+class EvolutionCache
+  @known_evolutions = Hash(Tuple(Stone, Int32), Array(Stone)).new
+
+  def add(original_stone, amount_of_generations, full_evolution)
+    @known_evolutions[{ original_stone, amount_of_generations }] = full_evolution
+  end
+
+  def find(original_stone, amount_of_generations)
+    @known_evolutions[{ original_stone, amount_of_generations }]?
+  end
+end
+
 class StoneSet
   getter stones : Array(Stone)
 
   def initialize(@stones)
+    @cache = EvolutionCache.new
   end
 
-  def evolve
-    @stones = @stones.flat_map(&.evolve)
+  def evolve(generations = 1)
+    @stones = @stones.flat_map do |stone|
+      stone.evolve(generations, @cache)
+    end
   end
 end
 
@@ -89,15 +122,11 @@ initial_stones = line.split
 
 puts "Part 1:"
 part_one_set = StoneSet.new(initial_stones)
-25.times do
-  part_one_set.evolve
-end
+part_one_set.evolve(25)
 puts part_one_set.stones.size
 
 puts "Part 2:"
 part_two_set = StoneSet.new(initial_stones)
-75.times do
-  part_two_set.evolve
-end
+part_one_set.evolve(75)
 puts part_two_set.stones.size
 
