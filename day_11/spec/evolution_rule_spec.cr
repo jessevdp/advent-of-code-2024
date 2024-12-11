@@ -30,3 +30,16 @@ describe SplitEvenDigitsEvolution do
   end
 end
 
+describe AlwaysMultiplyEvolution do
+  it "always applies" do
+    AlwaysMultiplyEvolution.new(2).applies_to?(Stone.new(0)).should be_true
+    AlwaysMultiplyEvolution.new(2).applies_to?(Stone.new(11)).should be_true
+    AlwaysMultiplyEvolution.new(2).applies_to?(Stone.new(12411)).should be_true
+  end
+
+  it "replaces the Stone by multiplyuing the value with a factor" do
+    result = AlwaysMultiplyEvolution.new(factor: 2).apply_to(Stone.new(3))
+    result.size.should eq(1)
+    result.first.should eq(Stone.new(6))
+  end
+end

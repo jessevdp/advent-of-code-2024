@@ -37,3 +37,16 @@ class SplitEvenDigitsEvolution < EvolutionRule
   end
 end
 
+class AlwaysMultiplyEvolution < EvolutionRule
+  def initialize(@factor : Int32)
+  end
+
+  def applies_to?(stone : Stone) : Bool
+    true
+  end
+
+  def apply_to(stone : Stone) : Array(Stone)
+    [Stone.new(value: stone.value * @factor)]
+  end
+end
+
