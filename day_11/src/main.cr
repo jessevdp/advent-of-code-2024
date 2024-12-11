@@ -76,3 +76,21 @@ class AlwaysMultiplyEvolution < EvolutionRule
   end
 end
 
+line = if ARGV.size > 0
+  filepath = ARGV.first
+  File.read_lines(filepath).first
+else
+  ""
+end
+
+initial_stones = line.split
+  .map(&.to_i)
+  .map { |value| Stone.new(value) }
+
+puts "Part 1:"
+part_one_set = StoneSet.new(initial_stones)
+25.times do
+  part_one_set.evolve
+end
+puts part_one_set.stones.size
+
