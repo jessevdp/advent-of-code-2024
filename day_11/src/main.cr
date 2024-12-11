@@ -15,3 +15,25 @@ class ZeroToOneEvolution < EvolutionRule
   end
 end
 
+class SplitEvenDigitsEvolution < EvolutionRule
+  def applies_to?(stone : Stone) : Bool
+    digit_count(stone).even?
+  end
+
+  def apply_to(stone : Stone) : Array(Stone)
+    digit_count = digit_count(stone)
+    divisor = 10 ** (digit_count // 2)
+    right = stone.value // divisor
+    left = stone.value % divisor
+
+    [
+      Stone.new(value: right),
+      Stone.new(value: left),
+    ]
+  end
+
+  private def digit_count(stone)
+    Math.log10(stone.value).floor.to_i + 1
+  end
+end
+
