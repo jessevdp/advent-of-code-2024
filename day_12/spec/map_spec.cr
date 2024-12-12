@@ -126,6 +126,30 @@ describe Map do
         map.plot!(x: 2, y: 3),
       ])
     end
+
+    it "sets the :x & :y coordinates of all Plots" do
+      map = Map.from_input([
+        "AAAA",
+        "BBCD",
+        "BBCC",
+        "EEEC",
+      ])
+
+      map.plot!(x: 0, y: 0).x.should eq(0)
+      map.plot!(x: 0, y: 0).y.should eq(0)
+
+      map.plot!(x: 3, y: 0).x.should eq(3)
+      map.plot!(x: 3, y: 0).y.should eq(0)
+
+      map.plot!(x: 0, y: 1).x.should eq(0)
+      map.plot!(x: 0, y: 1).y.should eq(1)
+
+      map.plot!(x: 2, y: 2).x.should eq(2)
+      map.plot!(x: 2, y: 2).y.should eq(2)
+
+      map.plot!(x: 3, y: 3).x.should eq(3)
+      map.plot!(x: 3, y: 3).y.should eq(3)
+    end
   end
 end
 

@@ -4,7 +4,10 @@ class Plot
   getter plant_type : Char
   getter neighbors : Array(Plot)
 
-  def initialize(@plant_type)
+  getter x : Int32
+  getter y : Int32
+
+  def initialize(@plant_type, @x, @y)
     @neighbors = [] of Plot
   end
 

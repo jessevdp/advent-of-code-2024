@@ -13,8 +13,10 @@ class Map
   end
 
   def self.from_input(lines : Array(String))
-    rows = lines.map do |line|
-      line.chars.map { |plant_type| Plot.new(plant_type) }
+    rows = lines.map_with_index do |line, y|
+      line.chars.map_with_index do |plant_type, x|
+        Plot.new(plant_type, x, y)
+      end
     end
     new(rows)
   end
