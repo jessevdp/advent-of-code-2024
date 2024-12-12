@@ -1,6 +1,36 @@
 require "./spec_helper"
 
 describe Region do
+  describe "#perimeter" do
+    it "returns the total length of all outer edges of a Region" do
+      map = Map.from_input([
+        "AAAA",
+        "BBCD",
+        "BBCC",
+        "EEEC",
+      ])
+      Region.for(map.plot!(x: 0, y: 0)).perimeter.should eq(10) # A
+      Region.for(map.plot!(x: 0, y: 1)).perimeter.should eq(8) # B
+      Region.for(map.plot!(x: 2, y: 1)).perimeter.should eq(10) # C
+      Region.for(map.plot!(x: 3, y: 1)).perimeter.should eq(4) # D
+      Region.for(map.plot!(x: 0, y: 3)).perimeter.should eq(8) # E
+    end
+    it "can handle complex nested Regions" do
+      map = Map.from_input([
+        "OOOOO",
+        "OXOXO",
+        "OOOOO",
+        "OXOXO",
+        "OOOOO",
+      ])
+      Region.for(map.plot!(x: 0, y: 0)).perimeter.should eq(36)
+      Region.for(map.plot!(x: 1, y: 1)).perimeter.should eq(4)
+      Region.for(map.plot!(x: 3, y: 1)).perimeter.should eq(4)
+      Region.for(map.plot!(x: 1, y: 3)).perimeter.should eq(4)
+      Region.for(map.plot!(x: 3, y: 3)).perimeter.should eq(4)
+    end
+  end
+
   describe "#area" do
     it "return the amount of plots covered by this Region" do
       map = Map.from_input([
