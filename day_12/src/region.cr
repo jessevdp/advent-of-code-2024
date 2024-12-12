@@ -15,20 +15,18 @@ record Region, plots : Set(Plot) do
   end
 
   def self.for(start_plot : Plot)
-    plots = Set(Plot).new
+    plots = [start_plot]
 
-    considered_plots = Set(Plot).new
-    plots_to_consider = [start_plot]
-    while plots_to_consider.any?
-      plot = plots_to_consider.shift
-      considered_plots << plot
-      next unless plot.plant_type == start_plot.plant_type
-
-      plots << plot
-      plots_to_consider += (plot.neighbors - considered_plots.to_a)
+    head = 0
+    while head < plots.size
+      plot = plots[head]
+      head += 1
+      plots += plot.neighbors
+        .select { |neighbor| neighbor.plant_type == plot.plant_type }
+        .reject { |neighbor| plots.includes?(neighbor) }
     end
 
-    new(plots)
+    new(plots.to_set)
   end
 end
 
