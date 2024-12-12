@@ -1,6 +1,92 @@
 require "./spec_helper"
 
 describe Map do
+  describe "#regions" do
+    it "returns all distinct Regions (of adjacent :plat_type)" do
+      map = Map.from_input([
+        "AAAA",
+        "BBCD",
+        "BBCC",
+        "EEEC",
+      ])
+      regions = map.regions
+      regions.size.should eq(5)
+      regions.should contain(Region.new([
+        map.plot!(x: 0, y: 0),
+        map.plot!(x: 1, y: 0),
+        map.plot!(x: 2, y: 0),
+        map.plot!(x: 3, y: 0),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 0, y: 1),
+        map.plot!(x: 1, y: 1),
+        map.plot!(x: 0, y: 2),
+        map.plot!(x: 1, y: 2),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 2, y: 1),
+        map.plot!(x: 2, y: 2),
+        map.plot!(x: 3, y: 2),
+        map.plot!(x: 3, y: 3),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 3, y: 1),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 0, y: 3),
+        map.plot!(x: 1, y: 3),
+        map.plot!(x: 2, y: 3),
+      ].to_set))
+    end
+
+    it "can handle complex nested Regions & multiple Regions of the same :plant_type" do
+      map = Map.from_input([
+        "OOOOO",
+        "OXOXO",
+        "OOOOO",
+        "OXOXO",
+        "OOOOO",
+      ])
+      regions = map.regions
+      regions.size.should eq(5)
+      regions.should contain(Region.new([
+        map.plot!(x: 1, y: 1),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 3, y: 1),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 1, y: 3),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 3, y: 3),
+      ].to_set))
+      regions.should contain(Region.new([
+        map.plot!(x: 0, y: 0),
+        map.plot!(x: 1, y: 0),
+        map.plot!(x: 2, y: 0),
+        map.plot!(x: 3, y: 0),
+        map.plot!(x: 4, y: 0),
+        map.plot!(x: 0, y: 1),
+        map.plot!(x: 2, y: 1),
+        map.plot!(x: 4, y: 1),
+        map.plot!(x: 0, y: 2),
+        map.plot!(x: 1, y: 2),
+        map.plot!(x: 2, y: 2),
+        map.plot!(x: 3, y: 2),
+        map.plot!(x: 4, y: 2),
+        map.plot!(x: 0, y: 3),
+        map.plot!(x: 2, y: 3),
+        map.plot!(x: 4, y: 3),
+        map.plot!(x: 0, y: 4),
+        map.plot!(x: 1, y: 4),
+        map.plot!(x: 2, y: 4),
+        map.plot!(x: 3, y: 4),
+        map.plot!(x: 4, y: 4),
+      ].to_set))
+    end
+  end
+
   describe ".from_input" do
     it "parses out all Plots including their :plant_type" do
       lines = [

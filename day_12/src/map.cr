@@ -19,6 +19,24 @@ class Map
     new(rows)
   end
 
+  def regions
+    regions = [] of Region
+
+    plots_to_consider = plots
+    while plots_to_consider.any?
+      plot = plots_to_consider.shift
+      region = Region.for(plot)
+      regions << region
+      plots_to_consider -= region.plots.to_a
+    end
+
+    regions
+  end
+
+  def plots
+    @rows.flatten
+  end
+
   def plot(x, y)
     return if x < 0 || x >= width
     return if y < 0 || y >= height
