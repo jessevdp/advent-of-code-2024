@@ -1,6 +1,20 @@
 require "./spec_helper"
 
 describe Region do
+  describe "#area" do
+    it "return the amount of plots covered by this Region" do
+      map = Map.from_input([
+        "AAAA",
+        "BBCD",
+        "BBCC",
+        "EEEC",
+      ])
+      start_plot = map.plot!(x: 0, y: 0)
+      region = Region.for(start_plot)
+      region.area.should eq(4)
+    end
+  end
+
   describe ".for" do
     it "creates a Region containing all adjecent Plots of the same :plant_type recursively" do
       map = Map.from_input([

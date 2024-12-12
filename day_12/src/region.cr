@@ -1,4 +1,8 @@
 record Region, plots : Set(Plot) do
+  def area
+    plots.size
+  end
+
   def self.for(start_plot : Plot)
     plots = Set(Plot).new
 
