@@ -17,3 +17,6 @@ map = Map.from_input(lines)
 puts "Part 1:"
 puts map.regions.map { |region| region.area * region.perimeter }.sum
 
+puts "Part 2:"
+puts map.regions.map { |region| region.area * region.sides }.sum
+
