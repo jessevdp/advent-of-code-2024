@@ -17,5 +17,11 @@ class Plot
 
     @neighbors << plot
   end
+
+  def edges
+    Direction.values.map do |direction|
+      Edge.new(x, y, direction)
+    end
+  end
 end
 
