@@ -1,6 +1,26 @@
 require "./spec_helper"
 
 describe ClawMachine do
+  describe "#cheapest_combination" do
+    it "returns the total cost of the cheapest combination of actions that reaches the target" do
+      ClawMachine.new(
+        target: Point.new(x: 8400, y: 5400),
+        actions: [
+          Action.new(dx: 94, dy: 34, cost: 3),
+          Action.new(dx: 22, dy: 67, cost: 1),
+        ],
+      ).cheapest_combination.not_nil!.total_cost.should eq(280)
+
+      ClawMachine.new(
+        target: Point.new(x: 7870, y: 6450),
+        actions: [
+          Action.new(dx: 17, dy: 86, cost: 3),
+          Action.new(dx: 84, dy: 37, cost: 1),
+        ],
+      ).cheapest_combination.not_nil!.total_cost.should eq(200)
+    end
+  end
+
   describe "#possible?" do
     it "returns false if 100 of each action is not sufficient to even reach the target" do
       ClawMachine.new(

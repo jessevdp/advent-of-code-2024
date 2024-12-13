@@ -8,5 +8,9 @@ record Point,
       y: y + action.dy,
     )
   end
+
+  def manhattan_distance(other : Point)
+    (other.x - x).abs + (other.y - y).abs
+  end
 end
 
