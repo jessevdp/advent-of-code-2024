@@ -1,6 +1,7 @@
 require "./plot"
 require "./edge"
 require "./direction"
+require "./axis"
 require "./region"
 require "./map"
 
