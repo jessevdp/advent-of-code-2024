@@ -1,11 +1,12 @@
 class Robot
   getter position : Point
   getter velocity : Vector2d
+  getter bounds : BoundingBox
 
-  def initialize(@position, @velocity)
+  def initialize(@position, @velocity, @bounds)
   end
 
-  def self.from_input(line : String)
+  def self.from_input(line : String, bounds : BoundingBox)
     match = line.match!(/p=(?<x>\d+),(?<y>\d+) v=(?<dx>-?\d+),(?<dy>-?\d+)/)
     position = Point.new(
       x: match["x"].to_i,
@@ -15,7 +16,7 @@ class Robot
       dx: match["dx"].to_i,
       dy: match["dy"].to_i,
     )
-    new(position, velocity)
+    new(position, velocity, bounds)
   end
 end
 

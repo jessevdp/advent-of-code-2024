@@ -1,5 +1,6 @@
 require "./point"
 require "./vector2d"
+require "./bounding_box"
 require "./robot"
 
 lines = if ARGV.size > 0
