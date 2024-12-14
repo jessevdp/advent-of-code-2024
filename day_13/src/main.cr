@@ -22,3 +22,16 @@ puts claw_machines
   .map(&.total_cost)
   .sum
 
+puts "Part 2:"
+claw_machines.each do |machine|
+  machine.target = Point.new(
+    x: machine.target.x + 10000000000000,
+    y: machine.target.y + 10000000000000,
+  )
+end
+puts claw_machines
+  .map(&.cheapest_combination)
+  .compact
+  .map(&.total_cost)
+  .sum
+

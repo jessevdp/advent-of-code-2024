@@ -1,5 +1,5 @@
 class ClawMachine
-  getter target : Point
+  property target : Point
   getter actions : Array(Action)
 
   def initialize(@target, @actions)
