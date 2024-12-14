@@ -1,6 +1,6 @@
 record Combination,
   current_point : Point,
-  total_cost : Int32 do
+  total_cost : Int64 do
 
   def +(action : Action)
     copy_with(

@@ -1,6 +1,6 @@
 record Point,
-  x : Int32,
-  y : Int32 do
+  x : Int64,
+  y : Int64 do
 
   def +(action : Action)
     copy_with(

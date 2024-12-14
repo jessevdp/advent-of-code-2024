@@ -1,7 +1,7 @@
 class PriorityQueue(T)
   @queue = [] of T
 
-  def initialize(&@calculate_priority : T -> Int32)
+  def initialize(&@calculate_priority : T -> Int64)
   end
 
   def any?
