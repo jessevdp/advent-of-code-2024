@@ -27,5 +27,44 @@ record BoundingBox,
       y: wrapped_y,
     )
   end
+
+  def contains?(point : Point)
+    return false if point.x < upper_left_bound.x || point.x > lower_right_bound.x
+    return false if point.y < upper_left_bound.y || point.y > lower_right_bound.y
+
+    true
+  end
+
+  def quadrants
+    top_left = copy_with(
+      lower_right_bound: lower_right_bound.copy_with(
+        x: (width // 2) - 1,
+        y: (height // 2) - 1,
+      ),
+    )
+    bottom_left = copy_with(
+      upper_left_bound: upper_left_bound.copy_with(
+        y: (height // 2) + 1,
+      ),
+      lower_right_bound: lower_right_bound.copy_with(
+        x: (width // 2) - 1,
+      ),
+    )
+    top_right = copy_with(
+      upper_left_bound: upper_left_bound.copy_with(
+        x: (width // 2) + 1,
+      ),
+      lower_right_bound: lower_right_bound.copy_with(
+        y: (height // 2) - 1,
+      ),
+    )
+    bottom_right = copy_with(
+      upper_left_bound: upper_left_bound.copy_with(
+        x: (width // 2) + 1,
+        y: (height // 2) + 1,
+      ),
+    )
+    {top_left, bottom_left, top_right, bottom_right}
+  end
 end
 
