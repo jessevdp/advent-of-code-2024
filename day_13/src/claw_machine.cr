@@ -1,16 +1,14 @@
 class ClawMachine
-  ACTION_MAXIMUM = 100
-
   getter target : Point
   getter actions : Array(Action)
 
   def initialize(@target, @actions)
   end
 
-  def possible?
+  def possible_with_budget?(presses_per_action)
     max = Point.new(0, 0)
     @actions.each do |action|
-      ACTION_MAXIMUM.times do
+      presses_per_action.times do
         max += action
       end
     end

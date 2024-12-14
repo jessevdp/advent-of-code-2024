@@ -16,7 +16,7 @@ claw_machines = ClawMachinesConfigurationParser.new(lines).parse
 
 puts "Part 1:"
 puts claw_machines
-  .select(&.possible?)
+  .select { |machine| machine.possible_with_budget?(100) }
   .map(&.cheapest_combination)
   .compact
   .map(&.total_cost)
