@@ -18,5 +18,9 @@ class Robot
     )
     new(position, velocity, bounds)
   end
+
+  def tick
+    @position += velocity
+  end
 end
 

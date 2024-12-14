@@ -1,6 +1,18 @@
 require "./spec_helper"
 
 describe Robot do
+  describe "#tick" do
+    it "moves the Robot according to its :velocity" do
+      robot = Robot.new(
+        position: Point.new(x: 2, y: 4),
+        velocity: Vector2d.new(dx: 2, dy: -3),
+        bounds: BoundingBox.of_dimensions(width: 11, height: 7),
+      )
+      robot.tick
+      robot.position.should eq(Point.new(x: 4, y: 1))
+    end
+  end
+
   describe ".from_input" do
     it "parses out the :position and :velocity" do
       line = "p=0,4 v=1,3"
