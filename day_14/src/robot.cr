@@ -20,7 +20,7 @@ class Robot
   end
 
   def tick
-    @position += velocity
+    @position = @bounds.wrap(@position + @velocity)
   end
 end
 

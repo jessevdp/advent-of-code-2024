@@ -11,6 +11,16 @@ describe Robot do
       robot.tick
       robot.position.should eq(Point.new(x: 4, y: 1))
     end
+
+    it "wraps around the :bounds if it would collide" do
+      robot = Robot.new(
+        position: Point.new(x: 4, y: 1),
+        velocity: Vector2d.new(dx: 2, dy: -3),
+        bounds: BoundingBox.of_dimensions(width: 11, height: 7),
+      )
+      robot.tick
+      robot.position.should eq(Point.new(x: 6, y: 5))
+    end
   end
 
   describe ".from_input" do

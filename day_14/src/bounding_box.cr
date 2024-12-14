@@ -10,5 +10,22 @@ record BoundingBox,
     )
     new(upper_left_bound, lower_right_bound)
   end
+
+  def width
+    (lower_right_bound.x - upper_left_bound.x) + 1
+  end
+
+  def height
+    (lower_right_bound.y - upper_left_bound.y) + 1
+  end
+
+  def wrap(point : Point)
+    wrapped_x = upper_left_bound.x + ((point.x - upper_left_bound.x + width) % width)
+    wrapped_y = upper_left_bound.y + ((point.y - upper_left_bound.y + height) % height)
+    point.copy_with(
+      x: wrapped_x,
+      y: wrapped_y,
+    )
+  end
 end
 
