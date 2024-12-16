@@ -58,9 +58,13 @@ record Point,
 end
 
 record MazePath,
-  current_position : Point,
+  positions : Array(Point),
   current_direction : Direction,
   total_cost : Int32 do
+
+  def current_position
+    positions.last.not_nil!
+  end
 
   def estimated_total_cost_to(point : Point)
     total_cost + current_position.manhattan_distance_to(point)
@@ -84,7 +88,7 @@ class MoveForward < Action
 
   def apply_to(path : MazePath) : MazePath
     path.copy_with(
-      current_position: destination(path),
+      positions: path.positions + [destination(path)],
       total_cost: path.total_cost + cost,
     )
   end
@@ -179,7 +183,7 @@ class Map
     end
 
     queue << MazePath.new(
-      current_position: start,
+      positions: [start],
       current_direction: Direction::East,
       total_cost: 0,
     )
@@ -235,4 +239,5 @@ puts paths_of_lowest_possible_score.first.total_cost
 
 puts "Part 2:"
 puts "paths: #{paths_of_lowest_possible_score.size}"
+puts paths_of_lowest_possible_score.flat_map(&.positions).to_set.size
 
