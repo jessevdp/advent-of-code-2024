@@ -167,7 +167,7 @@ class Map
     @rows.size
   end
 
-  def lowest_possible_score
+  def paths_of_lowest_possible_score
     actions = [
       MoveForward.new,
       TurnLeft.new,
@@ -184,6 +184,8 @@ class Map
       total_cost: 0,
     )
 
+    lowest_cost_paths = [] of MazePath
+
     visited = Set(Tuple(Point, Direction)).new
     while queue.any?
       path = queue.shift
@@ -191,12 +193,19 @@ class Map
       next if visited.includes?({ path.current_position, path.current_direction })
       visited << { path.current_position, path.current_direction }
 
-      return path.total_cost if path.current_position == finish
+      next if lowest_cost_paths.any? && path.total_cost > lowest_cost_paths.first.total_cost
+
+      if path.current_position == finish
+        lowest_cost_paths << path
+        next
+      end
 
       actions.each do |action|
         queue << path + action if action.possible?(path, map: self)
       end
     end
+
+    lowest_cost_paths
   end
 end
 
@@ -219,6 +228,11 @@ end
 
 map = Map.new(rows, start, finish)
 
+paths_of_lowest_possible_score = map.paths_of_lowest_possible_score
+
 puts "Part 1:"
-puts map.lowest_possible_score
+puts paths_of_lowest_possible_score.first.total_cost
+
+puts "Part 2:"
+puts "paths: #{paths_of_lowest_possible_score.size}"
 
