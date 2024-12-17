@@ -15,3 +15,5 @@ require "./out_instruction"
 require "./bdv_instruction"
 require "./cdv_instruction"
 
+require "./program"
+
