@@ -58,12 +58,19 @@ record Point,
 end
 
 record MazePath,
-  positions : Array(Point),
-  current_direction : Direction,
+  log : Array(Tuple(Point, Direction)),
   total_cost : Int32 do
 
   def current_position
-    positions.last.not_nil!
+    log.last[0]
+  end
+
+  def current_direction
+    log.last[1]
+  end
+
+  def stuck_in_loop?
+    log.count(log.last) > 1
   end
 
   def estimated_total_cost_to(point : Point)
@@ -88,7 +95,7 @@ class MoveForward < Action
 
   def apply_to(path : MazePath) : MazePath
     path.copy_with(
-      positions: path.positions + [destination(path)],
+      log: path.log + [{ destination(path), path.current_direction }],
       total_cost: path.total_cost + cost,
     )
   end
@@ -110,13 +117,15 @@ abstract class TurnAction < Action
 
   def apply_to(path : MazePath) : MazePath
     path.copy_with(
-      current_direction: direction(path),
+      log: path.log + [{ path.current_position, direction(path) }],
       total_cost: path.total_cost + cost,
     )
   end
 
   def possible?(path : MazePath, map : Map) : Bool
-    true
+    direction = direction(path)
+    next_destination = path.current_position + direction
+    map.tile(next_destination) == TileType::Empty
   end
 
   abstract def direction(path : MazePath) : Direction
@@ -183,20 +192,16 @@ class Map
     end
 
     queue << MazePath.new(
-      positions: [start],
-      current_direction: Direction::East,
+      log: [{ start, Direction::East }],
       total_cost: 0,
     )
 
     lowest_cost_paths = [] of MazePath
 
-    visited = Set(Tuple(Point, Direction)).new
     while queue.any?
       path = queue.shift
 
-      next if visited.includes?({ path.current_position, path.current_direction })
-      visited << { path.current_position, path.current_direction }
-
+      next if path.stuck_in_loop?
       next if lowest_cost_paths.any? && path.total_cost > lowest_cost_paths.first.total_cost
 
       if path.current_position == finish
@@ -239,5 +244,10 @@ puts paths_of_lowest_possible_score.first.total_cost
 
 puts "Part 2:"
 puts "paths: #{paths_of_lowest_possible_score.size}"
-puts paths_of_lowest_possible_score.flat_map(&.positions).to_set.size
+puts "costs: #{paths_of_lowest_possible_score.map(&.total_cost).join(',')}"
 
+visited_tiles = paths_of_lowest_possible_score.flat_map do |path|
+  path.log.map { |position, direction| position }
+end
+
+puts visited_tiles.to_set.size
