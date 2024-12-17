@@ -2,6 +2,7 @@ require "./register"
 require "./context"
 
 require "./operand"
+require "./literal_operand"
 require "./combo_operand"
 
 require "./instruction"
