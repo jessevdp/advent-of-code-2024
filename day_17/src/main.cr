@@ -8,4 +8,5 @@ require "./bxl_instruction"
 require "./bst_instruction"
 require "./jnz_instruction"
 require "./bxc_instruction"
+require "./out_instruction"
 
