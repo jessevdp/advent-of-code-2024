@@ -69,8 +69,12 @@ record MazePath,
     log.last[1]
   end
 
+  def current_state
+    log.last
+  end
+
   def stuck_in_loop?
-    log.count(log.last) > 1
+    log.count(current_state) > 1
   end
 
   def estimated_total_cost_to(point : Point)
@@ -198,11 +202,16 @@ class Map
 
     lowest_cost_paths = [] of MazePath
 
+    costs_of_visited_states = Hash(Tuple(Point, Direction), Int32).new
+
     while queue.any?
       path = queue.shift
 
       next if path.stuck_in_loop?
       next if lowest_cost_paths.any? && path.total_cost > lowest_cost_paths.first.total_cost
+      next if costs_of_visited_states.fetch(path.current_state, Int32::MAX) < path.total_cost
+
+      costs_of_visited_states[path.current_state] = path.total_cost
 
       if path.current_position == finish
         lowest_cost_paths << path
@@ -242,9 +251,10 @@ paths_of_lowest_possible_score = map.paths_of_lowest_possible_score
 puts "Part 1:"
 puts paths_of_lowest_possible_score.first.total_cost
 
+puts ""
+
 puts "Part 2:"
 puts "paths: #{paths_of_lowest_possible_score.size}"
-puts "costs: #{paths_of_lowest_possible_score.map(&.total_cost).join(',')}"
 
 visited_tiles = paths_of_lowest_possible_score.flat_map do |path|
   path.log.map { |position, direction| position }
