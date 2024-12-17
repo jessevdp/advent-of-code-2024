@@ -1,6 +1,8 @@
 require "./register"
 require "./context"
+
 require "./operand"
+require "./combo_operand"
 
 require "./instruction"
 require "./adv_instruction"
