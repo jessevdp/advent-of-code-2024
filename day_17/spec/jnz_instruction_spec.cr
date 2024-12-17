@@ -10,7 +10,7 @@ describe JnzInstruction do
         },
         instruction_pointer: 4,
       )
-      operand = TestOperand.new(value: 12)
+      operand = TestOperand.of_value(value: 12)
       JnzInstruction.new.perform(operand, context)
       context.instruction_pointer.should eq(12)
     end
@@ -24,7 +24,7 @@ describe JnzInstruction do
         },
         instruction_pointer: 4,
       )
-      operand = TestOperand.new(value: 12)
+      operand = TestOperand.of_value(value: 12)
       JnzInstruction.new.perform(operand, context)
       context.instruction_pointer.should eq(4)
     end

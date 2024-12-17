@@ -8,7 +8,7 @@ describe BxlInstruction do
         'B' => Register.new(6),
       }
     )
-    operand = TestOperand.new(value: 4)
+    operand = TestOperand.of_value(value: 4)
     BxlInstruction.new.perform(operand, context)
     context.registers['B'].value.should eq(2)
   end

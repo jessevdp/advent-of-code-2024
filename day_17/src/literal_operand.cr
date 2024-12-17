@@ -1,3 +1,5 @@
-record LiteralOperand, value : Int32 do
-  include Operand
+class LiteralOperand < Operand
+  def value : Int32
+    @raw_operand
+  end
 end

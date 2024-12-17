@@ -6,7 +6,7 @@ describe OutInstruction do
     context = Context.new(
       output: [1, 1, 9]
     )
-    operand = TestOperand.new(value: 12)
+    operand = TestOperand.of_value(value: 12)
     OutInstruction.new.perform(operand, context)
     context.output.should eq([1, 1, 9, 4])
   end

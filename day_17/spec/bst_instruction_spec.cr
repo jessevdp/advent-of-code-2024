@@ -8,7 +8,7 @@ describe BstInstruction do
         'B' => Register.new(0),
       }
     )
-    operand = TestOperand.new(value: 12)
+    operand = TestOperand.of_value(value: 12)
     BstInstruction.new.perform(operand, context)
     context.registers['B'].value.should eq(4)
   end

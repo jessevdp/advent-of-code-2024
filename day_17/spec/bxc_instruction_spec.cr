@@ -9,7 +9,7 @@ describe BxcInstruction do
         'C' => Register.new(4),
       }
     )
-    operand = TestOperand.new(value: 1)
+    operand = TestOperand.of_value(value: 1)
     BxcInstruction.new.perform(operand, context)
     context.registers['B'].value.should eq(2)
   end

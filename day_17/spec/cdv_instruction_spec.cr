@@ -9,7 +9,7 @@ describe CdvInstruction do
         'C' => Register.new(0),
       }
     )
-    operand = TestOperand.new(value: 2)
+    operand = TestOperand.of_value(value: 2)
     CdvInstruction.new.perform(operand, context)
     context.registers['C'].value.should eq(8)
     context.registers['A'].value.should eq(32)

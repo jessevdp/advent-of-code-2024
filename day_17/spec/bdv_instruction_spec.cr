@@ -9,7 +9,7 @@ describe BdvInstruction do
         'B' => Register.new(0),
       }
     )
-    operand = TestOperand.new(value: 2)
+    operand = TestOperand.of_value(value: 2)
     BdvInstruction.new.perform(operand, context)
     context.registers['B'].value.should eq(8)
     context.registers['A'].value.should eq(32)
