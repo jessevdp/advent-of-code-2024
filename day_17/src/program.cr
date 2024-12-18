@@ -1,5 +1,6 @@
 class Program
-  @contents : Array(Int32)
+  getter contents : Array(Int32)
+  getter context : Context
 
   def initialize(@contents, registers : Hash(Char, Register))
     @instruction_pointer = 0

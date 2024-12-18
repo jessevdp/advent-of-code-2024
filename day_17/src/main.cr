@@ -17,3 +17,5 @@ require "./cdv_instruction"
 
 require "./program"
 
+require "./program_parser"
+
