@@ -33,7 +33,7 @@ program.run
 puts program.output
 
 
-def reverse_engineer_output(program, a_value)
+def calculate_output_from_a(program, a_value)
   slice_of_A_to_output = {} of Int32 => Int32
 
   contents = program.contents
@@ -53,6 +53,27 @@ def reverse_engineer_output(program, a_value)
   end.join(',')
 end
 
+def calculate_a_from_output(program, output : Array(Int32))
+  slice_of_A_to_output = {} of Int32 => Int32
+
+  contents = program.contents
+  register_values = program.context.registers.transform_values(&.value)
+  8.times do |n|
+    register_values['A'] = n
+    registers = register_values.transform_values { |value| Register.new(value) }
+    program = Program.new(contents, registers)
+    program.run
+    raise "3 bit number returned more than 1 output" if program.context.output.size > 1
+    slice_of_A_to_output[n] = program.context.output.first
+  end
+
+  output.reverse.map do |output_value|
+    slice_of_A = slice_of_A_to_output.key_for(output_value)
+    bits = slice_of_A.to_s(2)
+    bits.rjust(3, '0')
+  end.join.to_i(2)
+end
+
 contents = program.contents
 register_values = program.context.registers.transform_values(&.value)
 100.times do |n|
@@ -62,6 +83,7 @@ register_values = program.context.registers.transform_values(&.value)
   program.run
   puts "A: #{n} base2:'#{n.to_s(2)}' base8: '#{n.to_s(8)}'"
   puts "program output: #{program.output}"
-  puts "reverse engineered: #{reverse_engineer_output(program, n)}"
+  puts "calculate_output_from_a: #{calculate_output_from_a(program, n)}"
+  puts "calculate_a_from_output: #{calculate_a_from_output(program, program.context.output)}"
   puts ""
 end
