@@ -3,7 +3,7 @@ class TestOperand < Operand
     new(raw_operand: value, context: Context.new)
   end
 
-  def value : Int32
+  def value : Int128
     @raw_operand
   end
 end

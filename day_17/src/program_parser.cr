@@ -26,10 +26,10 @@ class ProgramParser
   private def parse_contents
     line = contents_line
 
-    return [] of Int32 unless line
+    return [] of Int128 unless line
 
     match = line.match!(/\AProgram: (?<contents>\d(,\d)+)\z/)
-    match["contents"].split(',').map(&.to_i)
+    match["contents"].split(',').map(&.to_i128)
   end
 
   private def contents_line

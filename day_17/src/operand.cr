@@ -1,7 +1,7 @@
 abstract class Operand
-  def initialize(@raw_operand : Int32, @context : Context)
+  def initialize(@raw_operand : Int128, @context : Context)
   end
 
-  abstract def value : Int32
+  abstract def value : Int128
 end
 

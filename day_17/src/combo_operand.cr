@@ -1,5 +1,5 @@
 class ComboOperand < Operand
-  def value : Int32
+  def value : Int128
     case @raw_operand
     when 0..3 then @raw_operand
     when 4 then @context.registers['A'].value

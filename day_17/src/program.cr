@@ -1,9 +1,9 @@
 class Program
-  getter contents : Array(Int32)
+  getter contents : Array(Int128)
   getter context : Context
 
   def initialize(@contents, registers : Hash(Char, Register))
-    @instruction_pointer = 0
+    @instruction_pointer = 0.to_i128
     @context = Context.new(registers, @instruction_pointer)
   end
 

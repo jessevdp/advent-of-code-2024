@@ -1,5 +1,5 @@
 class Register
-  property value : Int32
+  property value : Int128
 
   def initialize(@value)
   end
