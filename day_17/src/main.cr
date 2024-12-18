@@ -19,3 +19,16 @@ require "./program"
 
 require "./program_parser"
 
+lines = if ARGV.size > 0
+  filepath = ARGV.first
+  File.read_lines(filepath)
+else
+  [] of String
+end
+
+program = ProgramParser.new(lines).parse
+
+puts "Part 1:"
+program.run
+puts program.output
+
